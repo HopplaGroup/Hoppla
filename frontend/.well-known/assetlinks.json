@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "ge.hoppla.twa",
+      "sha256_cert_fingerprints": [
+        "60af39cdb02c2dd677dceadcaec05b8b6b69a73b3a58ec582e5d646871727cf4"
+      ]
+    }
+  }
+]
