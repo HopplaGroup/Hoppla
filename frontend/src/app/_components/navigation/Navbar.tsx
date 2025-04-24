@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import * as m from "@/paraglide/messages.js";
 import { Prisma, User } from "@prisma/client";
 import Logo from "@/app/_components/Logo";
-import LanguageSwitcher from "./LanguageSwitcher";
+import LanguageSwitcher from "../LanguageSwitcher";
 import AuthBlock from "./AuthBlock";
 
 export default function Navbar({
@@ -42,9 +42,8 @@ export default function Navbar({
 
     return (
         <nav
-            className={`top-0 left-0 right-0 w-screen fixed z-[100] ${
-                scrolled ? "bg-white shadow-md" : "bg-white "
-            }`}
+            className={`top-0 left-0 right-0 w-screen fixed z-[100] ${scrolled ? "bg-white shadow-md" : "bg-white "
+                }`}
         >
             <div className="container">
                 <div className="flex h-16 md:h-20 items-center justify-between">
@@ -117,9 +116,8 @@ export default function Navbar({
             </div>
 
             <div
-                className={`h-px bg-gray-200 dark:bg-gray-800 transition-opacity duration-300 ${
-                    scrolled ? "opacity-0" : "opacity-100"
-                }`}
+                className={`h-px bg-gray-200 dark:bg-gray-800 transition-opacity duration-300 ${scrolled ? "opacity-0" : "opacity-100"
+                    }`}
             ></div>
         </nav>
     );

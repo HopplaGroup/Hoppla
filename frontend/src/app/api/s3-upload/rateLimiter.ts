@@ -1,6 +1,17 @@
 import { RateLimiterMemory } from "rate-limiter-flexible";
 
-export const uploadRateLimiter = new RateLimiterMemory({
-    points: 2, // Max 5 uploads
-    duration: 60, // Per 60 seconds
-});
+// Use a global symbol to persist the limiter across reloads (for dev mode)
+const globalForLimiter = globalThis as unknown as {
+    uploadRateLimiter?: RateLimiterMemory;
+};
+
+export const uploadRateLimiter =
+    globalForLimiter.uploadRateLimiter ??
+    new RateLimiterMemory({
+        points: 3,
+        duration: 10,
+    });
+
+if (process.env.NODE_ENV !== "production") {
+    globalForLimiter.uploadRateLimiter = uploadRateLimiter;
+}

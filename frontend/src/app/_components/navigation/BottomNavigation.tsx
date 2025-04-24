@@ -26,7 +26,7 @@ import {
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import { menv } from "@/lib/utils/menv";
 import { cn } from "@/lib/utils/cn";
-import LanguageSwitcher from "./LanguageSwitcher";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 export default function BottomNavigation({
     user,
@@ -53,7 +53,7 @@ export default function BottomNavigation({
         },
     ];
 
-  
+
 
     return (
         <>
@@ -112,7 +112,7 @@ export default function BottomNavigation({
                 </div>
             </div>
 
-     
+
         </>
     );
 }

@@ -18,8 +18,8 @@ import { Prisma } from "@prisma/client";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils/cn";
 import { Link } from "@/lib/i18n";
-import LanguageSwitcher from "./LanguageSwitcher";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 export default function Sidebar({
     isSidebarOpen,
@@ -62,15 +62,23 @@ export default function Sidebar({
     ];
 
     if (
-        user &&
-        (!user.driverVerificationRequest ||
-            user.driverVerificationRequest?.status == "PENDING")
+        user
+
     ) {
-        SIDEBAR_NAV_ITEMS.push({
-            href: "/send-driver-verification",
-            label: m.royal_civil_tuna_slide(),
-            icon: CarFront,
-        });
+        if (!user.driverVerificationRequest ||
+            user.driverVerificationRequest?.status == "PENDING") {
+            SIDEBAR_NAV_ITEMS.push({
+                href: "/send-driver-verification",
+                label: m.royal_civil_tuna_slide(),
+                icon: CarFront,
+            });
+        } else {
+            SIDEBAR_NAV_ITEMS.push({
+                href: "/send-driver-verification",
+                label: m.fine_silly_bison_pet(),
+                icon: CarFront,
+            });
+        }
     }
 
     const toggleSidebar = () => {
@@ -102,11 +110,10 @@ export default function Sidebar({
             />
 
             <div
-                className={`fixed bottom-0 right-0 md:left-0 md:right-auto w-3/4 md:w-56 h-screen bg-white z-[400] transform transition-transform duration-300 ease-in-out ${
-                    isSidebarOpen
-                        ? "translate-x-0"
-                        : "md:-translate-x-full translate-x-full"
-                }`}
+                className={`fixed bottom-0 right-0 md:left-0 md:right-auto w-3/4 md:w-56 h-screen bg-white z-[400] transform transition-transform duration-300 ease-in-out ${isSidebarOpen
+                    ? "translate-x-0"
+                    : "md:-translate-x-full translate-x-full"
+                    }`}
             >
                 <div className="flex flex-col h-full">
                     <div className="flex items-center justify-between p-4 border-b border-gray-200">

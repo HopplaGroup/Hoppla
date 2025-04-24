@@ -1,5 +1,5 @@
 import * as m from "@/paraglide/messages.js";
-import WithNavbarAndFooter from "./_components/WithNavbarAndFooter";
+import WithNavbarAndFooter from "./_components/navigation/WithNavbarAndFooter";
 import { Link } from "@/lib/i18n";
 
 export default async function NotFoundPage() {

@@ -1,4 +1,4 @@
-import WithNavbarAndFooter from "@/app/_components/WithNavbarAndFooter";
+import WithNavbarAndFooter from "@/app/_components/navigation/WithNavbarAndFooter";
 
 export default async function WithNavbarLayout({
     children,

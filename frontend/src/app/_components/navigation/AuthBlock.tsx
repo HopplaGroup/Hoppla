@@ -56,7 +56,7 @@ export default function AuthBlock({
             {user && (
                 <div className="relative" ref={dropdownRef}>
                     <button
-                        className="flex min-w-10 justify-between items-center py-3.5 px-4 rounded-full bg-transparent hover:bg-gray-200 transition-colors"
+                        className="relative flex min-w-10 justify-between items-center py-3.5 px-4 rounded-full bg-transparent hover:bg-gray-200 transition-colors"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
                         <Image
@@ -64,8 +64,9 @@ export default function AuthBlock({
                             alt="user avatar"
                             width={25}
                             height={25}
-                            className="object-cover size-[30px] rounded-full"
+                            className="absolute left-3 object-cover size-[30px] rounded-full"
                         />
+                        <div className="w-[25px]"></div>
                         <div className="md:flex flex-col items-start ml-2 max-w-[200px] overflow-hidden">
                             <div className="flex justify-center items-center gap-1">
                                 <span className="text-sm">
@@ -112,17 +113,26 @@ export default function AuthBlock({
                             {/* Driver Verification Link - conditional */}
                             {(!user.driverVerificationRequest ||
                                 user.driverVerificationRequest.status ==
-                                    "PENDING") && (
+                                "PENDING") && (
+                                    <Link
+                                        href="/send-driver-verification"
+                                        className="flex items-center px-4 py-2 text-sm  hover:bg-gray-100"
+                                        onClick={closeDropdown}
+                                    >
+                                        <FileCheck className="h-4 w-4 mr-2" />
+                                        {m.suave_keen_lion_enjoy()}
+                                    </Link>
+                                )}
+                            {user.driverVerificationRequest && user.driverVerificationRequest.status !== "PENDING" &&
                                 <Link
                                     href="/send-driver-verification"
                                     className="flex items-center px-4 py-2 text-sm  hover:bg-gray-100"
                                     onClick={closeDropdown}
                                 >
                                     <FileCheck className="h-4 w-4 mr-2" />
-                                    {m.suave_keen_lion_enjoy()}
+                                    {m.fine_silly_bison_pet()}
                                 </Link>
-                            )}
-
+                            }
                             {/* Logout Link */}
                             <div className="p-0">
                                 <LogoutLink
@@ -146,7 +156,7 @@ export default function AuthBlock({
                     }}
                     className={cn(
                         "bg-transparent hover:bg-gray-200 ",
-                        "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors"
+                        "flex items-center gap-2 rounded-full px-4 py-3.5 text-sm font-medium transition-colors"
                     )}
                 >
                     <>
