@@ -1,6 +1,6 @@
 "use server";
 
-import { createServerAction } from "@/lib/utils/create-server-action";
+import { createServerAction } from "@/lib/utils/createServerAction";
 import { z } from "zod";
 import PLACES from "@/lib/constants/places";
 import { menv } from "@/lib/utils/menv";

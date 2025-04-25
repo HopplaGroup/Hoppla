@@ -1,6 +1,6 @@
 "use server";
 
-import { createServerAction } from "@/lib/utils/create-server-action";
+import { createServerAction } from "@/lib/utils/createServerAction";
 import db from "@/lib/utils/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";

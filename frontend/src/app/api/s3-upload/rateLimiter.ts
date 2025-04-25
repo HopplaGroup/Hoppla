@@ -8,7 +8,7 @@ const globalForLimiter = globalThis as unknown as {
 export const uploadRateLimiter =
     globalForLimiter.uploadRateLimiter ??
     new RateLimiterMemory({
-        points: 3,
+        points: 6,
         duration: 10,
     });
 

@@ -12,6 +12,7 @@ import Script from "next/script";
 import { menv } from "@/lib/utils/menv";
 import BlockedUserPage from "./_components/BlockedUserPage";
 import Providers from "@/lib/providers";
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +49,7 @@ export default async function RootLayout({
                         "min-h-screen font-sans antialiased bg-gray-100"
                     )}
                 >
+                    <NuqsAdapter>
                     <Providers user={user}>
                         {user && user.status === "BLOCKED" ? (
                             <BlockedUserPage />
@@ -56,6 +58,7 @@ export default async function RootLayout({
                         )}
                         <Toaster />
                     </Providers>
+                    </NuqsAdapter>
                 </body>
 
                 {menv.NODE_ENV === "production" && (

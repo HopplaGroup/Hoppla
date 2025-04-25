@@ -3,7 +3,7 @@ import { RIDE_PRICE } from "@/lib/bog/constants";
 import refundPayment from "@/lib/bog/refund-payment";
 import { sendBanNotificationToUserEmail } from "@/lib/functions/emails/templates/send-ban-notification-to-user-email";
 import { getUser } from "@/lib/utils/auth";
-import { createServerAction } from "@/lib/utils/create-server-action";
+import { createServerAction } from "@/lib/utils/createServerAction";
 import db from "@/lib/utils/db";
 import { z } from "zod";
 

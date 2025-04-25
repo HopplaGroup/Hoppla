@@ -4,7 +4,7 @@
 import { z } from "zod";
 import { getUser } from "@/lib/utils/auth";
 import db from "@/lib/utils/db";
-import { createServerAction } from "@/lib/utils/create-server-action";
+import { createServerAction } from "@/lib/utils/createServerAction";
 import { DriverVerificationRequestStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 

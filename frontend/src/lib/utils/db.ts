@@ -11,6 +11,7 @@ declare global {
 
 const db = global.prisma ?? prismaClientSingleton();
 
+
 export default db;
 
 if (menv.NODE_ENV !== "production") global.prisma = db;

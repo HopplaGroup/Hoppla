@@ -4,7 +4,7 @@
 import { z } from "zod";
 import { uploadRateLimiter } from "@/app/api/s3-upload/rateLimiter";
 import { getUser } from "@/lib/utils/auth";
-import { createServerAction } from "@/lib/utils/create-server-action";
+import { createServerAction } from "@/lib/utils/createServerAction";
 
 // Define the logic function
 async function checkRateLimitLogic(_: {}) {

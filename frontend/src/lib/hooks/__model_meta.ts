@@ -681,6 +681,8 @@ const metadata = {
     }
     ,
     deleteCascade: {
+        ride: ['RideRule'],
+        rule: ['RideRule'],
     }
     ,
     authModel: 'User'

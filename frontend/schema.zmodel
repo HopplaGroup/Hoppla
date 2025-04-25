@@ -232,9 +232,10 @@ model RideStartedConfirmation extends Base {
 
 
 model RideRule extends Base {
-  rule   Rule   @relation(fields: [ruleId], references: [id])
+  // onDelete cascade
+  rule   Rule   @relation(fields: [ruleId], references: [id], onDelete: Cascade)
   ruleId String
-  ride   Ride   @relation(fields: [rideId], references: [id])
+  ride   Ride   @relation(fields: [rideId], references: [id], onDelete: Cascade)
   rideId String
 
   @@unique([ruleId, rideId])

@@ -260,9 +260,9 @@ model RideRule {
   id        String   @id() @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
-  rule      Rule     @relation(fields: [ruleId], references: [id])
+  rule      Rule     @relation(fields: [ruleId], references: [id], onDelete: Cascade)
   ruleId    String
-  ride      Ride     @relation(fields: [rideId], references: [id])
+  ride      Ride     @relation(fields: [rideId], references: [id], onDelete: Cascade)
   rideId    String
 
   @@unique([ruleId, rideId])

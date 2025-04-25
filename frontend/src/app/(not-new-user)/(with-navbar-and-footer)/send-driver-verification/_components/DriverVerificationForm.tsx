@@ -31,6 +31,9 @@ export default function DriverVerificationForm({ existingRequest, isRateLimited:
     const [timeUntilRateLimitGained, setTimeUntilRateLimitGained] = useState<number | null>(_timeUntilRateLimitGained);
     const [isRateLimited, setIsRateLimited] = useState(_isRateLimited);
 
+
+    // TODO: DONT upload if no new files changed
+
     const checkRateLimit = async () => {
         try {
             const res = await checkRateLimitAction({});
