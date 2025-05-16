@@ -93,6 +93,11 @@ services:
         condition: service_healthy
     volumes:
       - ./postgres-cronjob/log:/var/log
+      - ./backups/postgres:/backups
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   # --NOMINATIM-------------------------------------
   nominatim:
