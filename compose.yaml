@@ -82,6 +82,18 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
+
+  init-runner:
+    image: alpine:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./postgres-cronjob/cronjob.sh:/cronjob.sh
+      - ./postgres-cronjob/mycron:/etc/crontabs/root
+      - ./postgres-cronjob/cron-output.txt:/cron-output.txt
+    entrypoint: ["/bin/sh", "-c", "chmod +x /cronjob.sh && crond -f -l 2"]
+
   # --NOMINATIM-------------------------------------
   nominatim:
     container_name: nominatim
