@@ -38,7 +38,7 @@ async function uploadFileToS3(
 
   const encodedFileName = encodeURIComponent(fileName);
   const encodedFolderName = encodeURIComponent(folder);
-  return `${menv.MINIO_ENDPOINT}/${menv.MINIO_BUCKET}/${encodedFolderName}/${encodedFileName}`;
+  return `https://minioapi.hoppla.ge/${menv.MINIO_BUCKET}/uploads/${encodedFolderName}/${encodedFileName}`;
 }
 
 export const POST = async (req: NextRequest) => {
