@@ -10,101 +10,91 @@ import { uploadRateLimiter } from "./rateLimiter";
 
 // S3 client configuration
 const s3Client = new S3Client({
-    region: menv.AWS_S3_REGION,
-    credentials: {
-        accessKeyId: menv.AWS_S3_ACCESS_KEY_ID,
-        secretAccessKey: menv.AWS_S3_SECRET_ACCESS_KEY,
-    },
+  endpoint: menv.MINIO_ENDPOINT,
+  region: menv.MINIO_REGION,
+  forcePathStyle: true,
+  credentials: {
+    accessKeyId: menv.MINIO_ACCESS_KEY,
+    secretAccessKey: menv.MINIO_SECRET_KEY,
+  },
 });
 
 // Function to upload file to S3
 async function uploadFileToS3(
-    file: Buffer,
-    fileName: string,
-    folder: string,
-    mimeType: string
+  file: Buffer,
+  fileName: string,
+  folder: string,
+  mimeType: string
 ): Promise<string> {
-    const params = {
-        Bucket: menv.AWS_S3_BUCKET_NAME,
-        Key: `${folder}/${fileName}`,
-        Body: file,
-        ContentType: mimeType,
-    };
+  const params = {
+    Bucket: menv.MINIO_BUCKET,
+    Key: `${folder}/${fileName}`,
+    Body: file,
+    ContentType: mimeType,
+  };
 
-    const command = new PutObjectCommand(params);
-    await s3Client.send(command);
+  const command = new PutObjectCommand(params);
+  await s3Client.send(command);
 
-    const encodedFileName = encodeURIComponent(fileName);
-    const encodedFolderName = encodeURIComponent(folder);
-    return `https://${menv.AWS_S3_BUCKET_NAME}.s3.${menv.AWS_S3_REGION}.amazonaws.com/${encodedFolderName}/${encodedFileName}`;
+  const encodedFileName = encodeURIComponent(fileName);
+  const encodedFolderName = encodeURIComponent(folder);
+  return `${menv.MINIO_ENDPOINT}/${menv.MINIO_BUCKET}/${encodedFolderName}/${encodedFileName}`;
 }
 
 export const POST = async (req: NextRequest) => {
-    const user = await getUser();
+  const user = await getUser();
 
-    if (!user) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    await uploadRateLimiter.consume(user.id);
+  } catch {
+    return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+  }
+
+  try {
+    const formData = await req.formData();
+    const file = formData.get("file") as File | null;
+    const category = formData.get("category") as string | null;
+
+    const parsed = uploadSchema.safeParse({
+      category,
+      file,
+    });
+
+    // console.log errors exactly
+    if (parsed.error) {
+      console.error("Validation errors:", parsed.error.format());
     }
 
-    try {
-        await uploadRateLimiter.consume(user.id);
-    } catch {
-        return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Invalid data" }, { status: 400 });
+    }
+    const data = parsed.data;
+    if (data.file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        {
+          error: `File size exceeds ${MAX_FILE_SIZE / 1024 / 1024} MB.`,
+        },
+        { status: 400 }
+      );
     }
 
-    try {
-        const formData = await req.formData();
-        const file = formData.get("file") as File | null;
-        const category = formData.get("category") as string | null;
+    const folder = data.category ? `uploads/${data.category}` : "uploads/misc";
 
-        const parsed = uploadSchema.safeParse({
-            category,
-            file,
-        });
+    const buffer = Buffer.from(await data.file.arrayBuffer());
+    const extension = path.extname(data.file.name);
+    const id = `${uuidv4()}${extension}`;
+    const fileUrl = await uploadFileToS3(buffer, id, folder, data.file.type);
 
-        // console.log errors exactly
-        if (parsed.error) {
-            console.error("Validation errors:", parsed.error.format());
-        }
-
-        if (!parsed.success) {
-            return NextResponse.json(
-                { error: "Invalid data" },
-                { status: 400 }
-            );
-        }
-        const data = parsed.data;
-        if (data.file.size > MAX_FILE_SIZE) {
-            return NextResponse.json(
-                {
-                    error: `File size exceeds ${
-                        MAX_FILE_SIZE / 1024 / 1024
-                    } MB.`,
-                },
-                { status: 400 }
-            );
-        }
-
-        const folder = data.category
-            ? `uploads/${data.category}`
-            : "uploads/misc";
-
-        const buffer = Buffer.from(await data.file.arrayBuffer());
-        const extension = path.extname(data.file.name);
-        const id = `${uuidv4()}${extension}`;
-        const fileUrl = await uploadFileToS3(
-            buffer,
-            id,
-            folder,
-            data.file.type
-        );
-
-        return NextResponse.json({ success: true, fileUrl });
-    } catch (error) {
-        console.error("Error uploading file:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 }
-        );
-    }
+    return NextResponse.json({ success: true, fileUrl });
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
 };
