@@ -84,15 +84,14 @@ services:
       start_period: 80s
 
   init-runner:
-    image: alpine:latest
+    build:
+      context: ./postgres-cronjob
+    container_name: postgres-cron
     depends_on:
       postgres:
         condition: service_healthy
     volumes:
-      - ./postgres-cronjob/cronjob.sh:/cronjob.sh
-      - ./postgres-cronjob/mycron:/etc/crontabs/root
-      - ./postgres-cronjob/cron-output.txt:/cron-output.txt
-    entrypoint: ["/bin/sh", "-c", "chmod +x /cronjob.sh && crond -f -l 2"]
+      - ./postgres-cronjob/cron-output.txt:/var/log/cron-output.txt
 
   # --NOMINATIM-------------------------------------
   nominatim:
