@@ -92,7 +92,7 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./postgres-cronjob/cron-output.txt:/var/log/cron-output.txt
+      - ./postgres-cronjob/log:/var/log
 
   # --NOMINATIM-------------------------------------
   nominatim:
